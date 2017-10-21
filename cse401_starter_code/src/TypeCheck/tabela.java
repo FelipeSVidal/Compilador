@@ -16,12 +16,13 @@ public class tabela{
 		if(classes.containsKey(s)){
 			return false;
 		}
-		System.out.println("Adicionou"+classes.put(s, new Classe(s,c)));
+		classes.put(s, new Classe(s,c));
+//		System.out.println("Adicionou"+);
 		return true;
 	}
 	
 	public Classe pegar_classe(String s){
-		System.out.println("nome da busca"+s);
+		//System.out.println("nome da busca"+s);
 		if(classes.containsKey(s)){
 			return classes.get(s);
 		}
@@ -68,9 +69,6 @@ public class tabela{
 		}
 		throw new IllegalArgumentException("Variavel "+s+"não definida");
 		
-	}
-	public void imprimir(){
-		System.out.println(classes.values());
 	}
 	
 	

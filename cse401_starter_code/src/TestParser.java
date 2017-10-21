@@ -58,6 +58,7 @@ public class TestParser {
 		        	FileInputStream f = new FileInputStream("SamplePrograms/SampleMiniJavaPrograms/"+arq+".java");
 		        	InputStream is = f;
 		            scanner s = new scanner(is);
+		            System.out.println("Scanner Sucefull");
 		            parser p = new parser(s);
 		            Symbol root;
 		            root = p.parse();
@@ -67,10 +68,11 @@ public class TestParser {
 		                statement.accept(new PrettyPrintVisitor());
 						System.out.print("\n");
 		            }*/
-					program.accept(new PrettyPrintVisitor());
+//					program.accept(new PrettyPrintVisitor());
 					TypeVisitor tv = new TypeVisitor();
 					program.accept(tv);
-					tv.gettable().imprimir();
+					//tv.gettable().imprimir();
+					System.out.println(tv);
 					
 		            System.out.println("\nParsing successfull");
 	        	}

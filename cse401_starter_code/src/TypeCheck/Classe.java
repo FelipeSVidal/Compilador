@@ -93,5 +93,19 @@ public class Classe {
 		this.globais = globais;
 	}
 	
-	
+	public String toString(){
+		String result = "\tVariaveis Globais: \n";
+		for(String s: globais.keySet()){
+			variavel v = globais.get(s);
+			result +="\t\t";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+		}
+		result += "\tMetodos: \n";
+		for(String s:metodos.keySet()){
+			metodo m = metodos.get(s);
+			result += m.toString();
+		}
+		
+		return result;
+	}
 }

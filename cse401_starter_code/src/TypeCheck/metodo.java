@@ -78,4 +78,21 @@ public class metodo {
 	public void setParametros(List<variavel> parametros) {
 		this.parametros = parametros;
 	}
+	
+	public String toString(){
+		String result = "\t\t"+this.key+"\t -> \t"+this.tipo+"\n" +
+				"\t\tParametros: \n";
+		for(variavel v : parametros){
+			result +="\t\t\t";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+		}
+		result += "\t\tLocais: \n";
+		for(String s : locais.keySet()){
+			variavel v = locais.get(s);
+			result +="\t\t\t";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+		}
+		
+		return result;
+	}
 }

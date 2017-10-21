@@ -3,6 +3,8 @@ package TypeCheck;
 import java.util.HashMap;
 import java.util.Map;
 
+import Tipos.Tipo;
+
 import AST.And;
 import AST.ArrayAssign;
 import AST.ArrayLength;
@@ -65,15 +67,18 @@ public class TypeVisitor implements Visitor{
 		for(int i = 0; i<n.cl.size();i++){
 			n.cl.elementAt(i).accept(this);
 		}
+		
 	}
 
 	public void visit(MainClass n) {
 		// TODO Auto-generated method stub
-		
+	    n.i1.accept(this);
+	    n.i2.accept(this);
+	    n.s.accept(this);
 	}
 
 	public void visit(ClassDeclSimple n) {
-		System.out.println("Antes da busca:"+n.i.s);
+		//System.out.println("Antes da busca:"+n.i.s);
 		if(!(this.table.adicionar_classe(n.i.s, null))){
 			throw new IllegalArgumentException("A Classe: "+n.i.s + "Já existe.");
 		}
@@ -84,7 +89,7 @@ public class TypeVisitor implements Visitor{
 			n.vl.elementAt(i).accept(this);
 		}
 		for(int j=0;j< n.ml.size();j++){
-			System.out.print("1:"+n.ml.elementAt(j).i.s+"\n2:"+n.ml.elementAt(j).t+"\n3:"+lastClass.toString());
+		//	System.out.print("1:"+n.ml.elementAt(j).i.s+"\n2:"+n.ml.elementAt(j).t+"\n3:"+lastClass.toString());
 			lastClass.adicionar_metodos(n.ml.elementAt(j).i.s, new metodo(n.ml.elementAt(j).i.s,n.ml.elementAt(j).t));
 			n.ml.elementAt(j).accept(this);
 		}
@@ -94,6 +99,7 @@ public class TypeVisitor implements Visitor{
 		
 	}
 
+	// n.j -> Pai
 	public void visit(ClassDeclExtends n) {
 		// TODO Auto-generated method stub
 		
@@ -159,6 +165,13 @@ public class TypeVisitor implements Visitor{
 
 	public void visit(If n) {
 		// TODO Auto-generated method stub
+		n.e.accept(this);
+		if(n.e.t == null) throw new IllegalArgumentException("If com expressão null na linha: "+ n.e.line_number);
+		if(!(n.e.t.igual(Tipo.BOOLEAN))){
+			throw new IllegalArgumentException("A expressão deve ser Boolean na linha: "+n.e.line_number);
+		}
+		n.s1.accept(this);
+		n.s2.accept(this);
 		
 	}
 
@@ -265,6 +278,20 @@ public class TypeVisitor implements Visitor{
 	public void visit(Identifier n) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public String toString(){
+		String result = "";
+		result += "Classes:\n";
+		for(String s : table.classes.keySet()){
+			result += s+"\n";
+			Classe c = table.classes.get(s);
+			if(c.getPai() != null){
+				result += "\tExtends\t"+c.getPai()+"\n";
+			}
+			result += c.toString();
+		}
+		return result;
 	}
 
 }
