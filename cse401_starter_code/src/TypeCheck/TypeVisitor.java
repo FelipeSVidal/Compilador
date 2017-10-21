@@ -3,6 +3,7 @@ package TypeCheck;
 import java.util.HashMap;
 import java.util.Map;
 
+import Tipos.AbsTipo;
 import Tipos.Tipo;
 
 import AST.And;
@@ -166,7 +167,6 @@ public class TypeVisitor implements Visitor{
 	public void visit(If n) {
 		// TODO Auto-generated method stub
 		n.e.accept(this);
-		if(n.e.t == null) throw new IllegalArgumentException("If com expressão null na linha: "+ n.e.line_number);
 		if(!(n.e.t.igual(Tipo.BOOLEAN))){
 			throw new IllegalArgumentException("A expressão deve ser Boolean na linha: "+n.e.line_number);
 		}
@@ -237,21 +237,22 @@ public class TypeVisitor implements Visitor{
 
 	public void visit(IntegerLiteral n) {
 		// TODO Auto-generated method stub
-		
+		n.t = Tipo.INTEGER;
 	}
 
 	public void visit(True n) {
 		// TODO Auto-generated method stub
-		
+		n.t = Tipo.BOOLEAN;
 	}
 
 	public void visit(False n) {
 		// TODO Auto-generated method stub
-		
+		n.t = Tipo.BOOLEAN;
 	}
 
 	public void visit(IdentifierExp n) {
 		// TODO Auto-generated method stub
+		
 		
 	}
 
