@@ -9,6 +9,8 @@ class Fac {
 
     public int ComputeFac(int num){
 	int num_aux ;
+	Fac f;
+	f = new Fac();
 	if (num < 1)
 	    num_aux = 1 ;
 	else 

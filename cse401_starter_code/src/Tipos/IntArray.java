@@ -4,7 +4,6 @@ public class IntArray extends AbsTipo{
 	public int dimen;
 	public String tipo;
 	
-	
 	@Override
 	public boolean igual(AbsTipo outro) {
 		// TODO Auto-generated method stub

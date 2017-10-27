@@ -19,7 +19,7 @@ parser code {:
       /* Verifica se info é um Symbolo */
       if (info instanceof Symbol)       
 	if (((Symbol)info).left != -1)
-	  System.err.println(" at line " + ((Symbol)info).left +
+	  System.err.println(" atf line " + ((Symbol)info).left +
 			     " of input");
 	else System.err.println("");
       else System.err.println("");
@@ -69,7 +69,6 @@ nonterminal StatementList StatementList;
 nonterminal StatementList NonEmptySL; 
 nonterminal Statement Statement; 
 nonterminal Assign AssignStatement;
-nonterminal Print DisplayStatement;
 nonterminal While WhileStatement;
 nonterminal If IfStatement;
 nonterminal ArrayAssign ArrayAssignStatement;
@@ -204,9 +203,7 @@ Statement ::= LCURL:lc StatementList:s RCURL
                 {: RESULT = s; :}
             | WhileStatement:s
                 {: RESULT = s; :}
-            | DisplayStatement:s
-                {: RESULT = s; :}
-	    | AssignStatement:s
+	        | AssignStatement:s
                 {: RESULT = s; :}
             | ArrayAssignStatement:s
                 {: RESULT = s; :};
@@ -236,9 +233,6 @@ IfStatement ::= IF:i LPAREN Expression:expr RPAREN Statement:s1 ELSE Statement:s
 ArrayAssignStatement ::= Identifier:id LBRACKET Expression:expr1 RBRACKET BECOMES 
 			 Expression:expr2 SEMICOLON
                            {: RESULT = new ArrayAssign(id, expr1, expr2, idleft); :};
-
-DisplayStatement ::= PRINT:p Expression:expr SEMICOLON
-                       {: RESULT = new Print(expr, pleft); :};
 
 Expression ::= INTEGER:intl
                  {: RESULT = new IntegerLiteral(Integer.parseInt(intl), intlleft); :}

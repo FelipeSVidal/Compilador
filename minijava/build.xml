@@ -61,7 +61,7 @@
   </target>
 
   <target name="compile" depends="init, gen-scanner">
-    <javac srcdir="src"  destdir="build/classes" classpath="lib/CUP.jar"/>
+    <javac srcdir="src"  destdir="build/classes" classpath="lib/CUP.jar" includeantruntime="false"/>
   </target>
 
   <!-- targets for running test programs -->
