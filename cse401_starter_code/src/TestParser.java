@@ -47,6 +47,8 @@ public class TestParser {
 	        	case 8:
 	        		arq = "TreeVisitor";
 	        		break;
+	        	case 9:
+	        		arq = "Final";
 	        	case 0:
 	        		return;
 	        	default:
