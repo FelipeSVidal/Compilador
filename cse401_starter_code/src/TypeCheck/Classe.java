@@ -52,6 +52,13 @@ public class Classe {
 		}
 		return null;
 	}
+	
+	public void atualizar_metodo(String s, metodo m){
+		metodos.replace(s, m);
+	}
+	public void atualizar_global(String s, variavel v){
+		globais.replace(s, v);
+	}
 
 	public String getKey() {
 		return key;

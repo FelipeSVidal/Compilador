@@ -28,6 +28,10 @@ public class tabela{
 		}
 		return null;
 	}
+	public void atualizar_classe(String s, Classe c){
+		classes.replace(s, c);
+	}
+	
 	
 	public metodo pegar_metodos(String s,String c2){
 		Classe c = pegar_classe(c2);

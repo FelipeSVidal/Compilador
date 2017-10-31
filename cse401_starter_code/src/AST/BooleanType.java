@@ -1,4 +1,5 @@
 package AST;
+import TypeCheck.CriarTabela;
 import AST.Visitor.Visitor;
 
 public class BooleanType extends Type {
@@ -8,4 +9,5 @@ public class BooleanType extends Type {
   public void accept(Visitor v) {
     v.visit(this);
   }
+
 }

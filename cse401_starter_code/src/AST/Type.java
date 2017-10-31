@@ -1,4 +1,5 @@
 package AST;
+import TypeCheck.CriarTabela;
 import AST.Visitor.Visitor;
 
 public abstract class Type extends ASTNode {

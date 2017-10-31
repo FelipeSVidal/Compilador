@@ -1,4 +1,5 @@
 package AST;
+import TypeCheck.CriarTabela;
 import AST.Visitor.Visitor;
 
 public class NewArray extends Exp {
@@ -12,4 +13,5 @@ public class NewArray extends Exp {
   public void accept(Visitor v) {
     v.visit(this);
   }
+  
 }

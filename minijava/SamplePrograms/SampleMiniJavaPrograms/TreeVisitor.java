@@ -326,29 +326,6 @@ class Tree{
 
 }
 
-  
-
-class Visitor {
-    Tree l ;
-    Tree r ;
-
-    public int visit(Tree n){
-	int nti ;
-
-	if (n.GetHas_Right()){
-	    r = n.GetRight() ;
-	    nti = r.accept(this) ; }
-	else nti = 0 ;
-
-	if (n.GetHas_Left()) {
-	    l = n.GetLeft(); 
-	    nti = l.accept(this) ; }
-	else nti = 0 ;
-
-	return 0;
-    }
-
-}
 
 
 class MyVisitor extends Visitor {
@@ -372,3 +349,25 @@ class MyVisitor extends Visitor {
     }
 
 }
+class Visitor {
+    Tree l ;
+    Tree r ;
+
+    public int visit(Tree n){
+	int nti ;
+
+	if (n.GetHas_Right()){
+	    r = n.GetRight() ;
+	    nti = r.accept(this) ; }
+	else nti = 0 ;
+
+	if (n.GetHas_Left()) {
+	    l = n.GetLeft(); 
+	    nti = l.accept(this) ; }
+	else nti = 0 ;
+
+	return 0;
+    }
+
+}
+

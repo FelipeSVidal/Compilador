@@ -1,4 +1,5 @@
 package AST;
+import TypeCheck.CriarTabela;
 import AST.Visitor.Visitor;
 
 public class ClassDeclSimple extends ClassDecl {
@@ -13,5 +14,10 @@ public class ClassDeclSimple extends ClassDecl {
 
   public void accept(Visitor v) {
     v.visit(this);
+  }
+  @Override
+  public void accept(CriarTabela criarTabela) {
+  	// TODO Auto-generated method stub
+  	criarTabela.visit(this);
   }
 }

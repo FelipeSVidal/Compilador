@@ -1,4 +1,5 @@
 package AST;
+import TypeCheck.CriarTabela;
 import AST.Visitor.Visitor;
 
 public class MainClass extends ASTNode{
@@ -12,6 +13,11 @@ public class MainClass extends ASTNode{
 
   public void accept(Visitor v) {
     v.visit(this);
+  }
+	
+  public void accept(CriarTabela v) {
+	  // TODO Auto-generated method stub
+	  v.visit(this);
   }
 }
 

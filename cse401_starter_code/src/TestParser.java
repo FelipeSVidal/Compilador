@@ -3,7 +3,9 @@ import Parser.*;
 import AST.*;
 import AST.Visitor.*;
 import Throwables.*;
+import TypeCheck.CriarTabela;
 import TypeCheck.TypeVisitor;
+import TypeCheck.tabela;
 import java_cup.runtime.Symbol;
 
 import java.io.FileInputStream;
@@ -49,6 +51,7 @@ public class TestParser {
 	        		break;
 	        	case 9:
 	        		arq = "Final";
+	        		break;
 	        	case 0:
 	        		return;
 	        	default:
@@ -71,7 +74,10 @@ public class TestParser {
 						System.out.print("\n");
 		            }*/
 //					program.accept(new PrettyPrintVisitor());
-					TypeVisitor tv = new TypeVisitor();
+					tabela t = new tabela();
+					CriarTabela ct = new CriarTabela(t);
+					program.accept(ct);
+					TypeVisitor tv = new TypeVisitor(t);
 					program.accept(tv);
 					//tv.gettable().imprimir();
 					System.out.println(tv);

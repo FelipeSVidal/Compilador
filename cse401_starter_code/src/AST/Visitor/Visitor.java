@@ -12,6 +12,7 @@ public interface Visitor {
   public void visit(ClassDeclExtends n);
   public void visit(VarDecl n);
   public void visit(MethodDecl n);
+  
   public void visit(Formal n);
   public void visit(IntArrayType n);
   public void visit(BooleanType n);

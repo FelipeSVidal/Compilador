@@ -1,5 +1,6 @@
 package AST;
 import AST.Visitor.Visitor;
+import TypeCheck.CriarTabela;
 
 public class ArrayAssign extends Statement {
   public Identifier i;
@@ -13,5 +14,6 @@ public class ArrayAssign extends Statement {
   public void accept(Visitor v) {
     v.visit(this);
   }
+
 }
 

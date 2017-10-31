@@ -53,8 +53,8 @@ public class TypeVisitor implements Visitor{
 	
 	
 	
-	public TypeVisitor() {
-		table = new tabela();
+	public TypeVisitor(tabela t) {
+		table = t;
 	}
 	public tabela gettable(){
 		return table;
@@ -81,23 +81,18 @@ public class TypeVisitor implements Visitor{
 	}
 
 	public void visit(ClassDeclSimple n) {
-		//System.out.println("Antes da busca:"+n.i.s);
-		if(!(this.table.adicionar_classe(n.i.s, null))){
-			throw new IllegalArgumentException("A Classe: "+n.i.s + "Já existe.");
-		}
+		//// System.out.println("Antes da busca:"+n.i.s);
 		lastClass = this.table.pegar_classe(n.i.s);
 		n.i.accept(this);
 		for(int i =0; i< n.vl.size();i++){
-			lastClass.adicionar_globais(n.vl.elementAt(i).i.s, new variavel(n.vl.elementAt(i).i.s,n.vl.elementAt(i).t));
 			n.vl.elementAt(i).accept(this);
 		}
 		for(int j=0;j< n.ml.size();j++){
 		//	System.out.print("1:"+n.ml.elementAt(j).i.s+"\n2:"+n.ml.elementAt(j).t+"\n3:"+lastClass.toString());
-			lastClass.adicionar_metodos(n.ml.elementAt(j).i.s, new metodo(n.ml.elementAt(j).i.s,n.ml.elementAt(j).t));
 			n.ml.elementAt(j).accept(this);
 		}
-		
 		lastClass = null;
+		
 		// TODO Auto-generated method stub
 		
 	}
@@ -111,28 +106,26 @@ public class TypeVisitor implements Visitor{
 	public void visit(VarDecl n) {
 		n.t.accept(this);
 		n.i.accept(this);
-		if(lastMetodo ==null) this.lastClass.adicionar_globais(n.i.s, new variavel(n.i.s,n.t));
-		else this.lastMetodo.adicionar_locais(n.i.s, new variavel(n.i.s,n.t));
 	}
 
 	public void visit(MethodDecl n) {
-		this.lastClass.adicionar_metodos(n.i.s, new metodo(n.i.s,n.t));
 		this.lastMetodo = this.lastClass.pegar_metodo(n.i.s);
 		n.t.accept(this);
 		n.i.accept(this);
 		for(int i= 0;i<n.fl.size();i++){
-			this.lastMetodo.adicionar_parametros(new variavel(n.fl.elementAt(i).i.s,n.fl.elementAt(i).t));
 			n.fl.elementAt(i).accept(this);
 		}
 		for(int k = 0; k<n.vl.size();k++){
 			VarDecl v = n.vl.elementAt(k);
-			this.lastMetodo.adicionar_locais(v.i.s, new variavel(v.i.s,v.t));
 			v.accept(this);
 		}
 		for(int j=0;j<n.sl.size();j++){
 			n.sl.elementAt(j).accept(this);
 		}
+		
 		n.e.accept(this);
+		
+		lastMetodo = null;
 	}
 	
 // Inicio da definição de tipos
@@ -173,7 +166,7 @@ public class TypeVisitor implements Visitor{
 		if(c == null){
 			throw new IllegalArgumentException("Objeto inexistente na linha: "+n.line_number);
 		}
-//		System.out.println("KEY: "+c.getKey()+ " Pai: "+ c.getPai()+" LINHA: "+n.line_number);
+//		// System.out.println("KEY: "+c.getKey()+ " Pai: "+ c.getPai()+" LINHA: "+n.line_number);
 		n.tipo = new ClassTipo(c.getPai(),c.getKey());
 	}
 // Fim da definição de tipo
@@ -187,6 +180,7 @@ public class TypeVisitor implements Visitor{
 		if(!(n.e.tipo.equals(Tipo.BOOLEAN))){
 			throw new IllegalArgumentException("A expressão deve ser Boolean na linha: "+n.e.line_number);
 		}
+		// System.out.println("IF: "+n.line_number);
 		n.s1.accept(this);
 		n.s2.accept(this);
 		n.tipo = n.e.tipo;
@@ -230,9 +224,8 @@ public class TypeVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		n.e1.accept(this);
 		n.e2.accept(this);
-		if(!(n.e1.tipo.equals(Tipo.INTEGER))){
-			if(!(n.e2.tipo.equals(Tipo.INTEGER))){
-				System.out.println(n.e2.tipo);
+		if(!n.e1.tipo.equals(Tipo.INTEGER) && !n.e1.tipo.equals(Tipo.INTARRAY)){
+			if(!n.e2.tipo.equals(Tipo.INTEGER) && !n.e2.tipo.equals(Tipo.INTARRAY)){
 				throw new IllegalArgumentException("A expressão deve ser int na linha: "+n.line_number);
 			}
 		}
@@ -243,8 +236,8 @@ public class TypeVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		n.e1.accept(this);
 		n.e2.accept(this);
-		if(!n.e1.tipo.equals(Tipo.INTEGER)){
-			if(!n.e2.tipo.equals(Tipo.INTEGER)){
+		if(!n.e1.tipo.equals(Tipo.INTEGER) && !n.e1.tipo.equals(Tipo.INTARRAY)){
+			if(!n.e2.tipo.equals(Tipo.INTEGER) && !n.e2.tipo.equals(Tipo.INTARRAY)){
 				throw new IllegalArgumentException("A expressão deve ser int na linha: "+n.line_number);
 			}
 		}
@@ -255,8 +248,8 @@ public class TypeVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		n.e1.accept(this);
 		n.e2.accept(this);
-		if(!n.e1.tipo.equals(Tipo.INTEGER)){
-			if(!n.e2.tipo.equals(Tipo.INTEGER)){
+		if(!n.e1.tipo.equals(Tipo.INTEGER) && !n.e1.tipo.equals(Tipo.INTARRAY)){
+			if(!n.e2.tipo.equals(Tipo.INTEGER) && !n.e2.tipo.equals(Tipo.INTARRAY)){
 				throw new IllegalArgumentException("A expressão deve ser int na linha: "+n.line_number);
 			}
 		}
@@ -267,8 +260,8 @@ public class TypeVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		n.e1.accept(this);
 		n.e2.accept(this);
-		if(!n.e1.tipo.equals(Tipo.INTEGER)){
-			if(!n.e2.tipo.equals(Tipo.INTEGER)){
+		if(!n.e1.tipo.equals(Tipo.INTEGER) && !n.e1.tipo.equals(Tipo.INTARRAY)){
+			if(!n.e2.tipo.equals(Tipo.INTEGER) && !n.e2.tipo.equals(Tipo.INTARRAY)){
 				throw new IllegalArgumentException("A expressão deve ser int na linha: "+n.line_number);
 			}
 		}
@@ -280,7 +273,8 @@ public class TypeVisitor implements Visitor{
 	public void visit(ArrayLookup n) {
 		// TODO Auto-generated method stub
 		n.e1.accept(this);
-		if( !(n.e1.tipo.equals(Tipo.INTARRAY))){
+		// System.out.println(n.line_number+" TIPO: "+n.e1.tipo);
+		if( !(n.e1.tipo.equals(Tipo.INTARRAY))&& !(n.e1 instanceof IdentifierExp)){
 			throw new IllegalArgumentException("erro na linha"+n.e1.line_number+"esperado uma array");
 		}
 		n.e2.accept(this);
@@ -293,8 +287,9 @@ public class TypeVisitor implements Visitor{
 	public void visit(ArrayLength n) {
 		// TODO Auto-generated method stub
 		n.e.accept(this);
-		if(!n.e.tipo.equals(Tipo.INTARRAY)){
-			throw new IllegalArgumentException("erro na linha"+n.e.line_number+"esperado uma array");
+		// System.out.println(n.e);
+		if(!n.e.tipo.equals(Tipo.INTARRAY) && !(n.e instanceof IdentifierExp)){
+			throw new IllegalArgumentException("erro na linha"+n.e.line_number+" expressão errada na array");
 		}
 		n.tipo = Tipo.INTEGER;
 	}
@@ -306,33 +301,53 @@ public class TypeVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		n.i.accept(this);
 		n.e.accept(this);		
-		variavel v;
+		variavel v = null;
 		if(lastMetodo != null){
 			v = lastMetodo.pegar_parametro(n.i.s);
 			if(v==null) v=lastMetodo.getLocais().get(n.i.s);
-		}else{
+		}
+		if(v==null){
 			v=lastClass.getGlobais().get(n.i.s);
 		}
-//		System.out.println("KEY: "+v.getKey()+ " TIPO: "+v.getType());
+//		// System.out.println("KEY: "+v.getKey()+ " TIPO: "+v.getType());
 		v.getType().accept(this); // Necessário nos caso de ser um Objeto
-//		System.out.println("KEY: "+n.e+" TIPO: "+n.e.tipo);
+//		 // System.out.println("KEY: "+n.e+" TIPO: "+n.e.tipo);
 		if(v.getType() instanceof IntegerType){
 			n.i.tipo = Tipo.INTEGER;
 		}else if(v.getType() instanceof BooleanType){
 			n.i.tipo = Tipo.BOOLEAN;
-		}else{
+		}else if(v.getType() instanceof IntArrayType){
+			n.i.tipo = Tipo.INTARRAY;
+		}
+		else{
 			n.i.tipo = v.getType().tipo;
 		}
+		// System.out.println(n.e.tipo+" EI "+n.i.tipo + n.line_number);
 		if((n.e.tipo instanceof ClassTipo)){
+
+			// System.out.println(n.e.tipo.igual(n.i.tipo)+" EI "+n.e.tipo.insta(n.i.tipo) + n.line_number);
 			if(!((n.e.tipo.igual(n.i.tipo))||(n.e.tipo.insta(n.i.tipo)))){
 				throw new IllegalArgumentException("O objeto não pode ser instanciado na linha: "+n.line_number);
 			}
-		}else{
+		}else if(n.e.tipo.equals(Tipo.INTARRAY)){
+			if(n.i.tipo.equals(Tipo.INTEGER)){
+				// Caso ambas sejam Array, acontece nada
+			}else if(n.i.tipo.equals(Tipo.INTARRAY)){
+				
+			}
+			else if(!n.i.tipo.equals(Tipo.INTEGER)){// Caso seja inteiro = Array[] / array.length;
+				throw new IllegalArgumentException("Variavel não é inteira na linha: "+n.line_number);
+			}else{// Erro total
+				throw new IllegalArgumentException("Atribuição incorreta de tipos na linha: "+n.e.tipo + "  "+n.i.tipo);
+			}
+		}
+		else{
 			if(!n.i.tipo.equals(n.e.tipo)){
+				// System.out.println("ERROR: "+n.i.tipo.getClass()+"\t"+n.e.tipo.getClass());
 				throw new IllegalArgumentException("Atribuição incorreta de tipos na linha: "+n.line_number);
 			}
 		}
-//		System.out.println("N.i: "+n.i.tipo+" n.e.tipo: " +n.e.tipo);
+//		// System.out.println("N.i: "+n.i.tipo+" n.e.tipo: " +n.e.tipo);
 		
 		n.tipo = n.i.tipo;
 	}
@@ -342,17 +357,18 @@ public class TypeVisitor implements Visitor{
 		n.i.accept(this);
 		n.e1.accept(this);
 		n.e2.accept(this);
-		variavel v;
+		variavel v = null;
 		if(lastMetodo != null){
 			v = lastMetodo.pegar_parametro(n.i.s);
 			if(v==null) v=lastMetodo.getLocais().get(n.i.s);
-		}else{
+		}if(v==null){
 			v=lastClass.getGlobais().get(n.i.s);
 		}
+		// System.out.println("ARRAYASSIGN: "+n.e1.tipo +"\t"+ n.e2.tipo);
 		if(!n.e1.tipo.equals(Tipo.INTEGER)){
 			throw new IllegalArgumentException("Esperado valor inteiro no Colcheite: "+n.line_number);
 		}
-		if(!n.e2.tipo.equals(Tipo.INTEGER)){
+		if(!n.e2.tipo.equals(Tipo.INTEGER) && !n.e2.tipo.equals(Tipo.INTARRAY)){
 			throw new IllegalArgumentException("Esperado valor inteiro na atribuição da linha: "+n.line_number);
 		}
 		if(!(v.getType() instanceof IntArrayType)){
@@ -367,7 +383,7 @@ public class TypeVisitor implements Visitor{
 	public void visit(Print n) {
 		// TODO Auto-generated method stub
 		n.e.accept(this);
-		System.out.println(n.e.tipo);
+		//// System.out.println(n.e.tipo);
 	}
 	
 	public void visit(Block n) {
@@ -377,34 +393,73 @@ public class TypeVisitor implements Visitor{
 	    }
 	}	
 	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see AST.Visitor.Visitor#visit(AST.Call)
+	 * n.i.accept(this);
+		Classe c;
+		c = table.pegar_classe(n.i.s);
+		if(c == null){
+			throw new IllegalArgumentException("Objeto inexistente na linha: "+n.line_number);
+		}
+//		// System.out.println("KEY: "+c.getKey()+ " Pai: "+ c.getPai()+" LINHA: "+n.line_number);
+		n.tipo = new ClassTipo(c.getPai(),c.getKey());
+	 */
 	public void visit(Call n) {
 		// TODO Auto-generated method stub
 		n.e.accept(this);
-		System.out.println("AQUI: "+n.e.tipo);
+		n.i.accept(this);
+		// System.out.println("GHGH: "+n.e.tipo+n.line_number);
+		ClassTipo c = (ClassTipo)n.e.tipo;
+		metodo m = table.pegar_metodos(n.i.s, c.getKey());
+		for ( int i = 0; i < n.el.size(); i++ ) {
+	        n.el.elementAt(i).accept(this);
+	    }
+
+		if(m.getTipo() instanceof IntegerType){
+			n.i.tipo = Tipo.INTEGER;
+		}else if(m.getTipo() instanceof BooleanType){
+			n.i.tipo = Tipo.BOOLEAN;
+		}else if(m.getTipo() instanceof IdentifierType){
+			m.getTipo().accept(this);
+			// System.out.println("CALL: "+m.getTipo().tipo);
+			n.i.tipo = m.getTipo().tipo;
+		}
+		n.tipo = n.i.tipo;
 	}
 
 
 	public void visit(IdentifierExp n) {
 		// TODO Auto-generated method stub
-		variavel v;
+		variavel v = null;
 		if(lastMetodo != null){
 			v = lastMetodo.pegar_parametro(n.s);
 			if(v==null) v=lastMetodo.getLocais().get(n.s);
-		}else{
+		}
+		if(v==null){
 			v=lastClass.getGlobais().get(n.s);
 		}
+		v.getType().accept(this);
+		// System.out.println("FEJLFE: "+v.getType().tipo);
 		if(v.getType() instanceof IntegerType){
 			n.tipo = Tipo.INTEGER;
-		}else{
+		}else if(v.getType() instanceof BooleanType){
 			n.tipo = Tipo.BOOLEAN;
+		}else if(v.getType() instanceof IdentifierType){
+			//Classe c = table.pegar_classe(v.getType().tipo.toString());
+			v.getType().accept(this);
+			n.tipo = v.getType().tipo;
+		}else if(v.getType().tipo.equals(Tipo.INTARRAY)){
+			n.tipo = Tipo.INTARRAY;
 		}
-		//System.out.println("LINHA: "+n.s);
+		//// System.out.println("LINHA: "+n.s);
 		
 	}
 
 	public void visit(This n) {
 		// TODO Auto-generated method stub
-		
+		n.tipo = new ClassTipo(lastClass.getPai(), lastClass.getKey());
 	}
 
 	
@@ -423,7 +478,7 @@ public class TypeVisitor implements Visitor{
 
 	public void visit(IntArrayType n) {
 		// TODO Auto-generated method stub
-		
+		n.tipo = Tipo.INTARRAY;
 	}
 
 	public void visit(BooleanType n) {
@@ -436,7 +491,9 @@ public class TypeVisitor implements Visitor{
 
 	public void visit(IdentifierType n) {
 		// TODO Auto-generated method stub
-		n.tipo = new Tipo(n.s);
+		Classe c = table.pegar_classe(n.s);
+//		// System.out.println("IDENTIFIERTYPE: "+n.line_number +"\t"+ n.s);
+		n.tipo = new ClassTipo(c.getPai(),c.getKey());
 	}
 
 	// fim não necessários
