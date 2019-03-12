@@ -74,6 +74,10 @@ public class tabela{
 		throw new IllegalArgumentException("Variavel "+s+"não definida");
 		
 	}
+
+	public Map<String, Classe> getClasses() {
+		return classes;
+	}
 	
 	
 	

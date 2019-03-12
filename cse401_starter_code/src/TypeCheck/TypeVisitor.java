@@ -62,7 +62,6 @@ public class TypeVisitor implements Visitor{
 
 	public void visit(Return n) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void visit(Program n) {
@@ -100,7 +99,17 @@ public class TypeVisitor implements Visitor{
 	// n.j -> Pai
 	public void visit(ClassDeclExtends n) {
 		// TODO Auto-generated method stub
-		
+		this.table.pegar_classe(n.i.s).setPai(this.table.pegar_classe(n.j.s));
+		lastClass = this.table.pegar_classe(n.i.s);
+		n.i.accept(this);
+		for(int i =0; i< n.vl.size();i++){
+			n.vl.elementAt(i).accept(this);
+		}
+		for(int j=0;j< n.ml.size();j++){
+		//	System.out.print("1:"+n.ml.elementAt(j).i.s+"\n2:"+n.ml.elementAt(j).t+"\n3:"+lastClass.toString());
+			n.ml.elementAt(j).accept(this);
+		}
+		lastClass = null;
 	}
 
 	public void visit(VarDecl n) {
@@ -511,6 +520,7 @@ public class TypeVisitor implements Visitor{
 			if(c.getPai() != null){
 				result += "\tExtends\t"+c.getPai()+"\n";
 			}
+			result +=c.getOffset();
 			result += c.toString();
 		}
 		return result;

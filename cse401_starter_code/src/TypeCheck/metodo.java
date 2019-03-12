@@ -14,12 +14,16 @@ public class metodo {
 	private Type tipo;
 	private Map<String,variavel> locais;
 	private List<variavel> parametros;
+	private int offset;
+	static int os;
 	
 	public metodo(String s, Type t){
 		this.key = s;
 		tipo = t;
 		locais = new HashMap<String,variavel>();
 		parametros = new ArrayList<variavel>();
+		this.offset = Classe.os+4;
+		Classe.os += 4;
 	}
 	
 	public boolean adicionar_parametros(variavel v){
@@ -81,18 +85,22 @@ public class metodo {
 	
 	public String toString(){
 		String result = "\t\t"+this.key+"\t -> \t"+this.tipo+"\n" +
-				"\t\tParametros: \n";
+				"\t\t\tParametros: \n";
 		for(variavel v : parametros){
-			result +="\t\t\t";
-			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+			result +="\t\t\t\t";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\t -> \t"+v.getOffset()+"\n";
 		}
-		result += "\t\tLocais: \n";
+		result += "\t\t\tLocais: \n";
 		for(String s : locais.keySet()){
 			variavel v = locais.get(s);
-			result +="\t\t\t";
-			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+			result +="\t\t\t\t";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\t -> \t"+v.getOffset()+"\n";
 		}
 		
 		return result;
+	}
+
+	public int getOffset() {
+		return offset;
 	}
 }

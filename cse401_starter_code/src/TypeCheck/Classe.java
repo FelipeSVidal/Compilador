@@ -15,13 +15,16 @@ public class Classe {
 	private Classe pai;
 	private Map<String,metodo> metodos;
 	private Map<String,variavel> globais;
-	
+	private int offset;
+	static int os;
 	public Classe(String key, Classe pai) {
 		this.key = key;
 		this.pai = pai;
 //		this.tipo = (IdentifierType) t;
 		this.metodos = new HashMap<String, metodo>();
 		this.globais = new HashMap<String, variavel>();
+		this.offset = Classe.os+4;
+		Classe.os += 4;
 	}
 	
 	public boolean adicionar_metodos(String s, metodo m){
@@ -105,7 +108,7 @@ public class Classe {
 		for(String s: globais.keySet()){
 			variavel v = globais.get(s);
 			result +="\t\t";
-			result += v.getKey()+"\t -> \t"+v.getType()+"\n";
+			result += v.getKey()+"\t -> \t"+v.getType()+"\t -> \t"+v.getOffset()+"\n";
 		}
 		result += "\tMetodos: \n";
 		for(String s:metodos.keySet()){
@@ -114,5 +117,13 @@ public class Classe {
 		}
 		
 		return result;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 }

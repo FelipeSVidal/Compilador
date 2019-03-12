@@ -99,15 +99,6 @@ input_character = [^\r\n]
 
 "System.out.println" { return symbol(sym.PRINT); }
 
-/* operators */
-"+" { return symbol(sym.PLUS); }
-"-" { return symbol(sym.MINUS); }
-"=" { return symbol(sym.BECOMES); }
-"*" { return symbol(sym.MULT); }
-"<" { return symbol(sym.LESS); }
-"&&" { return symbol(sym.BAND); }
-"!" { return symbol(sym.NOT); }
-
 /* delimiters */
 "[" { return symbol(sym.LBRACKET); }
 "]" { return symbol(sym.RBRACKET); }
@@ -118,15 +109,8 @@ input_character = [^\r\n]
 ";" { return symbol(sym.SEMICOLON); }
 "," { return symbol(sym.COMMA); }
 
-/* types */ 
 "boolean" { return symbol(sym.BOOLEAN); }
 "int" { return symbol(sym.INT); }
-
-/* truth values - as expressions */
-"true" { return symbol(sym.TRUE); }
-"false" { return symbol(sym.FALSE); }
-
-/* others */
 "." { return symbol(sym.DOT); }
 "length" { return symbol(sym.LENGTH); }
 "this" { return symbol(sym.THIS); }
@@ -142,6 +126,19 @@ input_character = [^\r\n]
 "while" { return symbol(sym.WHILE); }
 "if" { return symbol(sym.IF); }
 "else" { return symbol(sym.ELSE); }
+"true" { return symbol(sym.TRUE); }
+"false" { return symbol(sym.FALSE); }
+
+
+/* Operadores */
+"+" { return symbol(sym.PLUS); }
+"-" { return symbol(sym.MINUS); }
+"=" { return symbol(sym.BECOMES); }
+"*" { return symbol(sym.MULT); }
+"<" { return symbol(sym.LESS); }
+"&&" { return symbol(sym.BAND); }
+"!" { return symbol(sym.NOT); }
+
 
 /* integers */
 {digit}|{pos_digit}{digit}* { return symbol(sym.INTEGER, yytext()); }

@@ -17,6 +17,7 @@ public class CriarTabela implements InterfaceTableVisitor{
 	private Classe lastClass;
 	private metodo lastMetodo;
 	private tabela table;
+	private int offset = 4;
 	
 	
 	public CriarTabela(tabela t){
@@ -48,7 +49,7 @@ public class CriarTabela implements InterfaceTableVisitor{
 		lastClass = this.table.pegar_classe(n.i.s);
 		n.i.accept(this);
 		for(int i =0; i< n.vl.size();i++){
-			lastClass.adicionar_globais(n.vl.elementAt(i).i.s, new variavel(n.vl.elementAt(i).i.s,n.vl.elementAt(i).t));
+			lastClass.adicionar_globais(n.vl.elementAt(i).i.s, new variavel(n.vl.elementAt(i).i.s,n.vl.elementAt(i).t,offset*(i+1)));
 			n.vl.elementAt(i).accept(this);
 		}
 		for(int j=0;j< n.ml.size();j++){
@@ -72,14 +73,16 @@ public class CriarTabela implements InterfaceTableVisitor{
 		}
 		lastClass = this.table.pegar_classe(n.i.s);
 		for(int i =0; i< n.vl.size();i++){
-			lastClass.adicionar_globais(n.vl.elementAt(i).i.s, new variavel(n.vl.elementAt(i).i.s,n.vl.elementAt(i).t));
+			lastClass.adicionar_globais(n.vl.elementAt(i).i.s, new variavel(n.vl.elementAt(i).i.s,n.vl.elementAt(i).t,offset*(i+1)));
 			n.vl.elementAt(i).accept(this);
 		}
 		for(int j=0;j< n.ml.size();j++){
 		//	System.out.print("1:"+n.ml.elementAt(j).i.s+"\n2:"+n.ml.elementAt(j).t+"\n3:"+lastClass.toString());
 			lastClass.adicionar_metodos(n.ml.elementAt(j).i.s, new metodo(n.ml.elementAt(j).i.s,n.ml.elementAt(j).t));
+			offset = (j+1)*4;
 			n.ml.elementAt(j).accept(this);
 		}
+		offset = 4;
 	//	this.table.atualizar_classe(n.i.s, lastClass);
 		lastClass = null;
 		// TODO Auto-generated method stub
@@ -89,8 +92,8 @@ public class CriarTabela implements InterfaceTableVisitor{
 
 	public void visit(VarDecl n) {
 		n.i.accept(this);
-		if(lastMetodo ==null) this.lastClass.adicionar_globais(n.i.s, new variavel(n.i.s,n.t));
-		else this.lastMetodo.adicionar_locais(n.i.s, new variavel(n.i.s,n.t));
+		if(lastMetodo ==null) this.lastClass.adicionar_globais(n.i.s, new variavel(n.i.s,n.t,0));
+		else this.lastMetodo.adicionar_locais(n.i.s, new variavel(n.i.s,n.t,offset));
 	}
 
 	public void visit(MethodDecl n) {
@@ -99,12 +102,12 @@ public class CriarTabela implements InterfaceTableVisitor{
 		
 		n.i.accept(this);
 		for(int i= 0;i<n.fl.size();i++){
-			this.lastMetodo.adicionar_parametros(new variavel(n.fl.elementAt(i).i.s,n.fl.elementAt(i).t));
+			this.lastMetodo.adicionar_parametros(new variavel(n.fl.elementAt(i).i.s,n.fl.elementAt(i).t,offset*(i+1)+4));
 			n.fl.elementAt(i).accept(this);
 		}
 		for(int k = 0; k<n.vl.size();k++){
 			VarDecl v = n.vl.elementAt(k);
-			this.lastMetodo.adicionar_locais(v.i.s, new variavel(v.i.s,v.t));
+			this.lastMetodo.adicionar_locais(v.i.s, new variavel(v.i.s,v.t,offset*(k+1)));
 			v.accept(this);
 		}
 		for(int j=0;j<n.sl.size();j++){

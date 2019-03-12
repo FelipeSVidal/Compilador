@@ -7,39 +7,10 @@ import java_cup.runtime.*;
 
 /* Codigo para geração do parser */
 
-parser code {:
-  /** Reporta um erro não fatal. Pega uma string(mensagem de erro) e um objeto e retorna uma mensagem de erro.
-   * @param message A mensagem de Erro.
-   * @param info    Objeto reservado.
-   */
-  public void report_error(String message, Object info)
-    {
-      System.err.print(message);
-      System.err.flush();
-      /* Verifica se info é um Symbolo */
-      if (info instanceof Symbol)       
-	if (((Symbol)info).left != -1)
-	  System.err.println(" atf line " + ((Symbol)info).left +
-			     " of input");
-	else System.err.println("");
-      else System.err.println("");
-    }
-:};  
-
 /* Terminais */
 
 /* Palavras Reservadas: */
 terminal PRINT;
-
-/* Pperadores: */
-terminal PLUS, BECOMES, MULT, LESS, BAND, NOT, MINUS;
-
-/* Delimitadores: */
-terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURL, RCURL, SEMICOLON, COMMA;
-
-/* tokens com valor: */
-terminal String IDENTIFIER, INTEGER;
-
 /* Palavras Chave */
 terminal TRUE, FALSE, INT, BOOLEAN, STRING, VOID;
 terminal WHILE, IF, ELSE;
@@ -47,6 +18,13 @@ terminal DOT, LENGTH, NEW, THIS;
 terminal PUBLIC, STATIC;
 terminal CLASS, EXTENDS;
 terminal MAIN, RETURN;
+
+/* Delimitadores: */
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURL, RCURL, SEMICOLON, COMMA;
+
+/* tokens com valor: */
+terminal String IDENTIFIER, INTEGER;
+
 
 
 /* Não terminais */
@@ -73,13 +51,6 @@ nonterminal While WhileStatement;
 nonterminal If IfStatement;
 nonterminal ArrayAssign ArrayAssignStatement;
 
-/* formais e variable */
-nonterminal FormalList FormalList;
-nonterminal FormalList NonEmptyFL; 
-nonterminal VarDeclList VarDeclList;
-nonterminal Formal Formal;
-nonterminal VarDecl VarDecl; 
-
 /* expressões */
 nonterminal ExpList ExpList;
 nonterminal ExpList NonEmptyEL;
@@ -88,6 +59,16 @@ nonterminal Exp Expression;
 /* Outros */
 nonterminal Type Type;
 nonterminal Identifier Identifier;
+
+/* formais e variable */
+nonterminal FormalList FormalList;
+nonterminal FormalList NonEmptyFL; 
+nonterminal VarDeclList VarDeclList;
+nonterminal Formal Formal;
+nonterminal VarDecl VarDecl; 
+
+/* Operadores: */
+terminal PLUS, BECOMES, MULT, LESS, BAND, NOT, MINUS;
 
 
 /* Precedencia de Operadores */
@@ -103,12 +84,9 @@ precedence left DOT;
 
 /* Produções */
 
-/* Goal ::= MainClass ( ClassDeclaration )* <EOF> */
 Program ::= MainClass:m ClassDeclList:cd
               {: RESULT = new Program(m, cd, mleft); :};
 
-/* MainClass := "class" Identifier "{" "public" "static" "void" "main" 
-  "(" "String" "[" "]" Identifier ")" "{" Statement "}" "}" */
 MainClass ::= CLASS:c Identifier:id1 LCURL PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET 
 	      RBRACKET Identifier:id2 RPAREN LCURL Statement:s RCURL RCURL
                 {: RESULT =  new MainClass(id1, id2, s, cleft); :};
@@ -285,3 +263,25 @@ NonEmptyEL ::= Expression:expr
 
 Identifier ::= IDENTIFIER:id
                  {: RESULT = new Identifier(id, idleft); :};
+                 
+
+parser code {:
+  /** Reporta um erro não fatal. Pega uma string(mensagem de erro) e um objeto e retorna uma mensagem de erro.
+   * É só uma correção para ficar melhor o entendimento quando estava fazendo-o.
+   * @param message A mensagem de Erro.
+   * @param info    Objeto reservado.
+   */
+  public void report_error(String message, Object info)
+    {
+      System.err.print(message);
+      System.err.flush();
+      /* Verifica se info é um Symbolo */
+      if (info instanceof Symbol)       
+	if (((Symbol)info).left != -1)
+	  System.err.println(" atf line " + ((Symbol)info).left +
+			     " of input");
+	else System.err.println("");
+      else System.err.println("");
+    }
+:};  
+                 
